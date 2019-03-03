@@ -1,7 +1,4 @@
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.util.Arrays;
 
@@ -40,6 +37,18 @@ class GameTest {
 
             sut.rolls(all10Frames);
             assertThat(sut.score(), is(20));
+        }
+
+        @Test
+        @DisplayName("Then too many rolls should throw")
+        void tooMany1PinShouldThrow() {
+            int[] all10Frames = new int[20];
+            Arrays.fill(all10Frames, 1);
+
+            sut.rolls(all10Frames);
+            Throwable exception = Assertions.assertThrows(IllegalStateException.class,
+                    () -> sut.roll(1));
+            Assertions.assertEquals("Too many rolls, game already over", exception.getMessage());
         }
     }
 
