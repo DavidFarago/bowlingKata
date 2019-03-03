@@ -1,3 +1,4 @@
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -18,5 +19,17 @@ class RollTest {
 
         Roll ten = new Roll(10);
         assertThat(ten.toString(), is("X"));
+    }
+
+    @Test
+    @DisplayName("Then bowling down other than 0 to 10 pins throws")
+    void thenOtherThan0to10PinsShouldThrow() {
+        Roll sut;
+        Throwable exception = Assertions.assertThrows(IllegalArgumentException.class,
+                () -> new Roll(-1));
+        Assertions.assertEquals("A roll must bowl down 0 to 10 pins, not -1", exception.getMessage());
+        exception = Assertions.assertThrows(IllegalArgumentException.class,
+                () -> new Roll(11));
+        Assertions.assertEquals("A roll must bowl down 0 to 10 pins, not 11", exception.getMessage());
     }
 }

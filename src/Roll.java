@@ -8,7 +8,7 @@ public final class Roll {
 
     public Roll(int pinsFallen) {
         if (pinsFallen < 0 || pinsFallen > 10) {
-            throw new IllegalArgumentException("A roll must bowl down 0 to 10 pins");
+            throw new IllegalArgumentException("A roll must bowl down 0 to 10 pins, not " + pinsFallen);
         }
         pins = pinsFallen;
     }
