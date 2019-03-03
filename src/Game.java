@@ -28,6 +28,21 @@ public final class Game {
         } else {
             bonusRoll(pins);
         }
+        updateBonusesAndScore();
+    }
+
+    // for full failure atomicity, make defensive copy
+    public void rolls(int ... pinsArray) {
+        if (currentFrame + (pinsArray.length / 2) > 10) {
+            throw new IllegalStateException("Too many rolls, game already over");
+        }
+        for (int pins : pinsArray) {
+            roll(pins);
+        }
+    }
+
+    public int score() {
+        return frames[Math.min(currentFrame, 9)].getScore();
     }
 
     private void bonusRoll(int pins) {
@@ -50,17 +65,40 @@ public final class Game {
         }
     }
 
-    // for full failure atomicity, make defensive copy
-    public void rolls(int ... pinsArray) {
-        if (currentFrame + (pinsArray.length / 2) > 10) {
-            throw new IllegalStateException("Too many rolls, game already over");
+    private void updateBonusesAndScore() {
+        int startFrame = 0;
+        int predecessorScore = 0;
+        if (currentFrame > 3) {
+            startFrame = currentFrame - 3;
+            predecessorScore = frames[currentFrame - 4].getScore();
         }
-        for (int pins : pinsArray) {
-            roll(pins);
+        for (int index = startFrame; index <= Math.min(currentFrame, 9); index++) {
+            updateBonuses(index);
+            frames[index].setScoreBasedOnPredecessorScore(predecessorScore);
+            predecessorScore = frames[index].getScore();
         }
     }
 
-    public int score(){
-        return Arrays.stream(frames).mapToInt(Frame::getPins).sum();
+    private void updateBonuses(int index) {
+        if (index < 9) {
+            if (frames[index].isSpare()) {
+                frames[index].setFirstBonus(frames[index + 1].getFirstRoll());
+            } else if (frames[index].isStrike()) {
+                frames[index].setFirstBonus(frames[index + 1].getFirstRoll());
+                frames[index].setSecondBonus(getSecondBonusAfter(index));
+            }
+        }
+    }
+
+    private Roll getSecondBonusAfter(int index) {
+        if (frames[index + 1].isStrike()) {
+            if (index < 8) {
+                return frames[index + 2].getFirstRoll();
+            } else {
+                return frames[index + 1].getFirstBonus();
+            }
+        } else {
+            return frames[index + 1].getSecondRoll();
+        }
     }
 }
