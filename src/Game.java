@@ -1,5 +1,3 @@
-import java.util.Arrays;
-
 /**
  * Bowling kata with shippable quality:
  * * outer quality: correct, robust, usable
@@ -41,8 +39,51 @@ public final class Game {
         }
     }
 
+    public boolean isFinished() {
+        return (currentFrame == 10) && (
+                (frames[9].isStrike() && frames[9].getFirstBonus() != null && frames[9].getSecondBonus() != null) ||
+                (frames[9].isSpare() && frames[9].getFirstBonus() != null) ||
+                (!frames[9].isSpare() && !frames[9].isStrike()) );
+    }
+
     public int score() {
         return frames[Math.min(currentFrame, 9)].getScore();
+    }
+
+    public static void main(String[] args) {
+        Game game = new Game();
+        for (String pinsString : args) {
+            int pins;
+            try {
+                pins = Integer.parseInt(pinsString);
+            } catch (NumberFormatException nfe) {
+                if (pinsString.equals("X")) {
+                    pins = 10;
+                } else {
+                    throw new IllegalArgumentException("Only digits 0 to 9 or X allowed");
+                }
+            }
+            if (game.isFinished()) {
+                throw new IllegalArgumentException("Too many rolls, game has already finished");
+            }
+            game.roll(pins);
+            System.out.println(game);
+        }
+        if (!game.isFinished()) {
+            throw new IllegalArgumentException("Too few rolls, game has not yet finished");
+        }
+        System.out.println("Congrats, you achieved the score " + game.score());
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder firstLine = new StringBuilder();
+        StringBuilder secondLine = new StringBuilder();
+        for (int index = 0; index <= Math.min(currentFrame, 9); index++) {
+            firstLine.append(frames[index]);
+            secondLine.append("|").append(String.format("%3s", frames[index].getScore())).append("|");
+        }
+        return firstLine.toString() + "\n" + secondLine.toString() + "\n";
     }
 
     private void bonusRoll(int pins) {
