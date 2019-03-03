@@ -7,9 +7,9 @@ public final class Frame {
     Roll optionalFirstBonus;
     Roll optionalSecondBonus;
 
-    public void roll(Roll roll) {
+    public void roll(int pins) {
         if (firstRoll == null) {
-            firstRoll = roll;
+            firstRoll = new Roll(pins);
         } else {
             if (isStrike()) {
                 throw new IllegalStateException("No second roll in a frame after strike");
@@ -17,7 +17,10 @@ public final class Frame {
             if (isFull()) {
                 throw new IllegalStateException("No third roll in a frame");
             }
-            optionalSecondRoll = roll;
+            if (firstRoll.getPins() + pins > 10) {
+                throw new IllegalArgumentException("No more pins than 10 in a frame");
+            }
+            optionalSecondRoll = new Roll(pins);
         }
     }
 
@@ -36,5 +39,42 @@ public final class Frame {
     public int getPins() {
         return (firstRoll == null ? 0 : firstRoll.getPins())
                 + (optionalSecondRoll == null ? 0 : optionalSecondRoll.getPins());
+    }
+
+    public Roll getFirstRoll() {
+        return firstRoll;
+    }
+
+    public Roll getSecondRoll() {
+        return optionalSecondRoll;
+    }
+
+    public Roll getFirstBonus() {
+        return optionalFirstBonus;
+    }
+
+    public void setFirstBonus(Roll optionalFirstBonus) {
+        this.optionalFirstBonus = optionalFirstBonus;
+    }
+
+    public Roll getSecondBonus() {
+        return optionalSecondBonus;
+    }
+
+    public void setSecondBonus(Roll optionalSecondBonus) {
+        this.optionalSecondBonus = optionalSecondBonus;
+    }
+
+    @Override
+    public String toString() {
+        String firstString = " ";
+        String secondString = " ";
+        if (getFirstRoll() != null) {
+            firstString = getFirstRoll().toString();
+        }
+        if (getSecondRoll() != null) {
+            secondString = getSecondRoll().toString();
+        }
+        return "|" + firstRoll + " " + secondString + "|";
     }
 }
