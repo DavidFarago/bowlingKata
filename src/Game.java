@@ -12,7 +12,8 @@ public final class Game {
     }
 
     public void roll(int pins) {
-        score +=pins;
+        Roll roll = new Roll(pins);
+        score +=roll.getPins();
     }
 
     public void rolls(int ... pinsArray) {
