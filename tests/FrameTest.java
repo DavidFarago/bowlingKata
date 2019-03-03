@@ -48,7 +48,7 @@ class FrameTest {
 
         @Test
         @DisplayName("Then rolling 4 and 4 and 0 pins should throw")
-        void then440Yields9() {
+        void then440Throws() {
             sut.roll(4);
             sut.roll(4);
             Throwable exception = Assertions.assertThrows(IllegalStateException.class,
@@ -58,7 +58,7 @@ class FrameTest {
 
         @Test
         @DisplayName("Then rolling 9 and 2 pins should throw")
-        void then92Yields9() {
+        void then92Throws() {
             sut.roll(9);
             Throwable exception = Assertions.assertThrows(IllegalArgumentException.class,
                     () -> sut.roll(2));
@@ -108,6 +108,25 @@ class FrameTest {
             assertThat(sut.isFull(), is(true));
             assertThat(sut.getPins(), is(10));
             assertThat(sut.toString(), is("|0 X|"));
+        }
+
+        @Test
+        @DisplayName("Then rolling 10 and 0 pins should throw")
+        void then100Throws() {
+            sut.roll(10);
+            Throwable exception = Assertions.assertThrows(IllegalStateException.class,
+                    () -> sut.roll(0));
+            Assertions.assertEquals("No second roll in a frame after strike", exception.getMessage());
+        }
+
+        @Test
+        @DisplayName("Then rolling 9 and 1 and 0 pins should throw")
+        void then910Throws() {
+            sut.roll(9);
+            sut.roll(1);
+            Throwable exception = Assertions.assertThrows(IllegalStateException.class,
+                    () -> sut.roll(0));
+            Assertions.assertEquals("No third roll in a frame", exception.getMessage());
         }
     }
 }
