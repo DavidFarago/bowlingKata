@@ -80,8 +80,10 @@ public final class Game {
         StringBuilder firstLine = new StringBuilder();
         StringBuilder secondLine = new StringBuilder();
         for (int index = 0; index <= Math.min(currentFrame, 9); index++) {
-            firstLine.append(frames[index]);
-            secondLine.append("|").append(String.format("%3s", frames[index].getScore())).append("|");
+            if (frames[index].getFirstRoll() != null) {
+                firstLine.append(frames[index]);
+                secondLine.append("|").append(String.format("%3s", frames[index].getScore())).append("|");
+            }
         }
         return firstLine.toString() + "\n" + secondLine.toString() + "\n";
     }
