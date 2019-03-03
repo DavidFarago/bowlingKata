@@ -4,7 +4,7 @@ import java.util.Objects;
  * Represents an immutable bowling ball roll with 0 to 10 pins bowled down.
  */
 public final class Roll {
-    private int pins;
+    private final int pins;
 
     public Roll(int pinsFallen) {
         if (pinsFallen < 0 || pinsFallen > 10) {
