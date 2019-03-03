@@ -5,8 +5,14 @@
  */
 public final class Game {
 
-    public void roll(int pins) {
+    private int score;
 
+    public Game() {
+        score = 0;
+    }
+
+    public void roll(int pins) {
+        score +=pins;
     }
 
     public void rolls(int ... pinsArray) {
@@ -16,6 +22,6 @@ public final class Game {
     }
 
     public int score(){
-        return 0;
+        return score;
     }
 }
