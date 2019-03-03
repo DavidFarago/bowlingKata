@@ -2,10 +2,11 @@
  * Represents a bowling frame with 1 to 2 rolls and 0 to 2 bonuses.
  */
 public final class Frame {
-    Roll firstRoll;
-    Roll optionalSecondRoll;
-    Roll optionalFirstBonus;
-    Roll optionalSecondBonus;
+    private Roll firstRoll;
+    private Roll optionalSecondRoll;
+    private Roll optionalFirstBonus;
+    private Roll optionalSecondBonus;
+    private int currentScore = 0;
 
     public void roll(int pins) {
         if (firstRoll == null) {
@@ -41,27 +42,40 @@ public final class Frame {
                 + (optionalSecondRoll == null ? 0 : optionalSecondRoll.getPins());
     }
 
-    public Roll getFirstRoll() {
+    public int getBonuses() {
+        return (optionalFirstBonus == null ? 0 : optionalFirstBonus.getPins())
+                + (optionalSecondBonus == null ? 0 : optionalSecondBonus.getPins());
+    }
+
+    public int getScore() {
+        return currentScore;
+    }
+
+    public void setScoreBasedOnPredecessorScore(int predecessorScore) {
+        this.currentScore = predecessorScore + getPins() + getBonuses();
+    }
+
+    Roll getFirstRoll() {
         return firstRoll;
     }
 
-    public Roll getSecondRoll() {
+    Roll getSecondRoll() {
         return optionalSecondRoll;
     }
 
-    public Roll getFirstBonus() {
+    Roll getFirstBonus() {
         return optionalFirstBonus;
     }
 
-    public void setFirstBonus(Roll optionalFirstBonus) {
+    void setFirstBonus(Roll optionalFirstBonus) {
         this.optionalFirstBonus = optionalFirstBonus;
     }
 
-    public Roll getSecondBonus() {
+    Roll getSecondBonus() {
         return optionalSecondBonus;
     }
 
-    public void setSecondBonus(Roll optionalSecondBonus) {
+    void setSecondBonus(Roll optionalSecondBonus) {
         this.optionalSecondBonus = optionalSecondBonus;
     }
 
@@ -75,6 +89,6 @@ public final class Frame {
         if (getSecondRoll() != null) {
             secondString = getSecondRoll().toString();
         }
-        return "|" + firstRoll + " " + secondString + "|";
+        return "|" + firstString + " " + secondString + "|";
     }
 }
