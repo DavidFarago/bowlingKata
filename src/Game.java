@@ -50,6 +50,7 @@ public final class Game {
         return frames[Math.min(currentFrame, 9)].getScore();
     }
 
+    // Give the rolls as argument list containing the right amount of numbers (0 to 10 or X).
     public static void main(String[] args) {
         Game game = new Game();
         for (String pinsString : args) {
@@ -60,17 +61,17 @@ public final class Game {
                 if (pinsString.equals("X")) {
                     pins = 10;
                 } else {
-                    throw new IllegalArgumentException("Only digits 0 to 9 or X allowed");
+                    throw new IllegalArgumentException("Only numbers 0 to 10 or X allowed");
                 }
             }
             if (game.isFinished()) {
-                throw new IllegalArgumentException("Too many rolls, game has already finished");
+                throw new IllegalArgumentException("Too many numbers, game has already finished");
             }
             game.roll(pins);
             System.out.println(game);
         }
         if (!game.isFinished()) {
-            throw new IllegalArgumentException("Too few rolls, game has not yet finished");
+            throw new IllegalArgumentException("Too few numbers, game has not yet finished");
         }
         System.out.println("Congrats, you achieved the score " + game.score());
     }
