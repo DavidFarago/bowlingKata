@@ -65,4 +65,49 @@ class FrameTest {
             Assertions.assertEquals("No more pins than 10 in a frame", exception.getMessage());
         }
     }
+
+    @Nested
+    @DisplayName("When a frame with bonus is filled")
+    class WhenFrameWithBonus {
+
+        @Test
+        @DisplayName("Then rolling 10 pins should yield a strike")
+        void then10YieldsStrike() {
+            sut.roll(10);
+            assertThat(sut.getFirstRoll().getPins(), is(10));
+            assertThat(sut.isStrike(), is(true));
+            assertThat(sut.isSpare(), is(false));
+            assertThat(sut.isFull(), is(true));
+            assertThat(sut.getPins(), is(10));
+            assertThat(sut.toString(), is("|X  |"));
+        }
+
+        @Test
+        @DisplayName("Then rolling 1 and 9 pins should be a spare")
+        void then19YieldsSpare() {
+            sut.roll(1);
+            sut.roll(9);
+            assertThat(sut.getFirstRoll().getPins(), is(1));
+            assertThat(sut.getSecondRoll().getPins(), is(9));
+            assertThat(sut.isStrike(), is(false));
+            assertThat(sut.isSpare(), is(true));
+            assertThat(sut.isFull(), is(true));
+            assertThat(sut.getPins(), is(10));
+            assertThat(sut.toString(), is("|1 9|"));
+        }
+
+        @Test
+        @DisplayName("Then rolling 0 and 10 pins should be a spare")
+        void then010YieldsSpare() {
+            sut.roll(0);
+            sut.roll(10);
+            assertThat(sut.getFirstRoll().getPins(), is(0));
+            assertThat(sut.getSecondRoll().getPins(), is(10));
+            assertThat(sut.isStrike(), is(false));
+            assertThat(sut.isSpare(), is(true));
+            assertThat(sut.isFull(), is(true));
+            assertThat(sut.getPins(), is(10));
+            assertThat(sut.toString(), is("|0 X|"));
+        }
+    }
 }
