@@ -48,8 +48,21 @@ class GameTest {
             sut.rolls(all10Frames);
             Throwable exception = Assertions.assertThrows(IllegalStateException.class,
                     () -> sut.roll(1));
-            Assertions.assertEquals("Too many rolls, game already over", exception.getMessage());
+            Assertions.assertEquals("Too many rolls, game already over (after 20 rolls)", exception.getMessage());
         }
     }
+    @Nested
+    @DisplayName("When a game with strikes is played")
+    class WhenStrikingGame {
 
+        @Test
+        @DisplayName("Then all strikes should yield 300 score")
+        void allStrikes() {
+            int[] all10FramesAndTwoBonusRolls = new int[12];
+            Arrays.fill(all10FramesAndTwoBonusRolls, 10);
+
+            sut.rolls(all10FramesAndTwoBonusRolls);
+            assertThat(sut.score(), is(300));
+        }
+    }
 }
