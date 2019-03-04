@@ -50,6 +50,22 @@ class GameTest {
                     () -> sut.roll(1));
             Assertions.assertEquals("Too many rolls, game already over (after 20 rolls)", exception.getMessage());
         }
+
+        @Test
+        @DisplayName("Then rolling 9 and 2 pins should throw")
+        void then92Throws() {
+            sut.roll(9);
+            Throwable exception = Assertions.assertThrows(IllegalArgumentException.class,
+                    () -> sut.roll(2));
+            Assertions.assertEquals("No more pins than 10 in a frame (but 9 and 2 rolled)", exception.getMessage());
+        }
+
+        @Test
+        @DisplayName("Then rolling 0, 9, 2 pins should not throw")
+        void then092() {
+            sut.rolls(0, 9, 2);
+            assertThat(sut.score(), is(11));
+        }
     }
     @Nested
     @DisplayName("When a game with strikes is played")

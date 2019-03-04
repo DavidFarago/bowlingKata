@@ -53,14 +53,18 @@ public final class Game {
                 isFinished = endSituation(currentFrame, rollIndex + 1);
                 rollIndex += 2;
             } else {
-                currentScore += getPins(rollIndex) + getPins(rollIndex + 1);
+                final int framePins = getPins(rollIndex) + getPins(rollIndex + 1);
+                if (framePins > 10) {
+                    throw new IllegalArgumentException("No more pins than 10 in a frame (but "
+                            + getPins(rollIndex) + " and " + getPins(rollIndex + 1) + " rolled)");
+                }
+                currentScore += framePins;
                 firstLine.append(makeFrameString(rolls[rollIndex], rolls[rollIndex + 1]));
                 isFinished = endSituation(currentFrame, rollIndex + 1);
                 rollIndex += 2;
             }
             secondLine.append("|").append(String.format("%3s", currentScore)).append("|");
             currentFrame += 1;
-            System.out.println("Is finished: " + isFinished);
         }
         currentScoreBoard = firstLine.toString() + "\n" + secondLine.toString() + "\n";
         currentEndScore = currentScore;
