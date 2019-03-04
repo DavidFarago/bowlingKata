@@ -127,5 +127,27 @@ class GameTest {
             sut.rolls(all10FramesAndOneBonusRoll);
             assertThat(sut.score(), is(150));
         }
+
+        @Test
+        @DisplayName("Then 0 rolls for 9 frames and then three 5 rolls should yield 15 score")
+        void lastStrike() {
+            int[] for9Frames = new int[18];
+            Arrays.fill(for9Frames, 0);
+            sut.rolls(for9Frames);
+            sut.rolls(5, 5, 5);
+            assertThat(sut.score(), is(15));
+        }
+
+        @Test
+        @DisplayName("Then too many spares should throw")
+        void tooManyStrikesShouldThrow() {
+            int[] all10FramesAndTwoBonusRolls = new int[21];
+            Arrays.fill(all10FramesAndTwoBonusRolls, 5);
+
+            sut.rolls(all10FramesAndTwoBonusRolls);
+            Throwable exception = Assertions.assertThrows(IllegalStateException.class,
+                    () -> sut.roll(0));
+            Assertions.assertEquals("Too many rolls, game already over (after 21 rolls)", exception.getMessage());
+        }
     }
 }
