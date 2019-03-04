@@ -50,7 +50,7 @@ public final class Game {
             } else if (isSpare(rollIndex)) {
                 currentScore += 10 + getPins(rollIndex + 2);
                 firstLine.append(makeFrameString(rolls[rollIndex], rolls[rollIndex + 1]));
-                isFinished = endSituation(currentFrame, rollIndex + 1);
+                isFinished = endSituation(currentFrame, rollIndex + 2);
                 rollIndex += 2;
             } else {
                 final int framePins = getPins(rollIndex) + getPins(rollIndex + 1);

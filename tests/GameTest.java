@@ -113,4 +113,19 @@ class GameTest {
             Assertions.assertEquals("Too many rolls, game already over (after 12 rolls)", exception.getMessage());
         }
     }
+
+    @Nested
+    @DisplayName("When a game with spares is played")
+    class WhenSparingGame {
+
+        @Test
+        @DisplayName("Then all spares should yield 150 score")
+        void allStrikes() {
+            int[] all10FramesAndOneBonusRoll = new int[21];
+            Arrays.fill(all10FramesAndOneBonusRoll, 5);
+
+            sut.rolls(all10FramesAndOneBonusRoll);
+            assertThat(sut.score(), is(150));
+        }
+    }
 }
