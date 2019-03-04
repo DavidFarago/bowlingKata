@@ -35,6 +35,10 @@ public final class Game {
         }
     }
 
+    public int score(){
+        return currentEndScore;
+    }
+
     private void updateScoreBoardAndFinished() {
         StringBuilder firstLine = new StringBuilder();
         StringBuilder secondLine = new StringBuilder();
@@ -101,7 +105,34 @@ public final class Game {
         return "|" + firstString + " " + secondString + "|";
     }
 
-    public int score(){
-        return currentEndScore;
+    @Override
+    public String toString() {
+        return currentScoreBoard;
+    }
+
+        // Give the rolls as argument list containing the right amount of numbers (0 to 10 or X).
+    public static void main(String[] args) {
+        Game game = new Game();
+        for (String pinsString : args) {
+            int pins;
+            try {
+                pins = Integer.parseInt(pinsString);
+            } catch (NumberFormatException nfe) {
+                if (pinsString.equals("X")) {
+                    pins = 10;
+                } else {
+                    throw new IllegalArgumentException("Only numbers 0 to 10 or X allowed");
+                }
+            }
+            if (game.isFinished) {
+                throw new IllegalArgumentException("Too many numbers, game has already finished");
+            }
+            game.roll(pins);
+            System.out.println(game);
+        }
+        if (!game.isFinished) {
+            throw new IllegalArgumentException("Too few numbers, game has not yet finished");
+        }
+        System.out.println("Congrats, you achieved the score " + game.score());
     }
 }
